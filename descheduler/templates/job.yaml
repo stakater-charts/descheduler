@@ -1,0 +1,39 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "name" . }}
+  namespace: kube-system
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: "true"
+spec:
+# Every 6 Hours
+  schedule: "{{ .Values.descheduler.job.schedule }}"
+  jobTemplate:
+    spec:
+      parallelism: {{ .Values.descheduler.job.parallelism }}
+      completions: {{ .Values.descheduler.job.completions }}
+      template:
+        metadata:
+          labels:
+{{ include "labels.stakater" . | indent 10 }}
+{{ include "labels.chart" . | indent 10 }}
+          name: {{ template "name" . }}-pod
+          annotations:
+            scheduler.alpha.kubernetes.io/critical-pod: "true"
+        spec:
+            containers:
+            - name: {{ template "name" . }}
+              image: "{{ .Values.descheduler.image.name }}:{{ .Values.descheduler.image.tag }}"
+              volumeMounts:
+              - mountPath: /policy-dir
+                name: policy-volume
+              command:
+              - "/bin/sh"
+              - "-ec"
+              - "/bin/descheduler -v 2 --policy-config-file /policy-dir/policy.yaml"
+            restartPolicy: "{{ .Values.descheduler.job.restartPolicy }}"
+            serviceAccountName: {{ template "name" . }}-sa
+            volumes:
+            - name: policy-volume
+              configMap:
+                name: {{ template "name" . }}-policy-configmap

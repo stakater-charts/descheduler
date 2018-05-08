@@ -2,7 +2,6 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: {{ template "name" . }}
-  namespace: kube-system
   annotations:
     scheduler.alpha.kubernetes.io/critical-pod: "true"
 spec:

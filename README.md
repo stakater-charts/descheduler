@@ -3,7 +3,7 @@ This repository contains 1 chart that is used to deploy descheduler to kubernete
 - descheduler
 
 ## Installing
-First install `descheduler` chart
+Install `descheduler` chart
 ```
 helm install --name descheduler chartmuseum/descheduler
 ```

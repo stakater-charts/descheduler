@@ -2,7 +2,7 @@ descheduler:
   labels:
     group: com.stakater.platform
     provider: stakater
-    version: 0.3.0
+    version: v0.3.0
     namespace: dev
   image:
     name: stakater/descheduler

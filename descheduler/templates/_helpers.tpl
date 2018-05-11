@@ -23,7 +23,7 @@ provider: {{ .Values.descheduler.labels.provider }}
 
 {{- define "labels.stakater" -}}
 {{ template "labels.selector" . }}
-version: {{ .Values.descheduler.labels.version | quote }}
+version: "{{ .Values.descheduler.labels.version }}"
 {{- end -}}
 
 {{- define "labels.chart" -}}

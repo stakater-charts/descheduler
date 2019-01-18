@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ template "name" . }}
+  name: {{ template "descheduler.name" . }}
   annotations:
     scheduler.alpha.kubernetes.io/critical-pod: "true"
 spec:
@@ -14,14 +14,14 @@ spec:
       template:
         metadata:
           labels:
-{{ include "labels.stakater" . | indent 12 }}
-{{ include "labels.chart" . | indent 12 }}
-          name: {{ template "name" . }}-pod
+{{ include "descheduler.labels.stakater" . | indent 12 }}
+{{ include "descheduler.labels.chart" . | indent 12 }}
+          name: {{ template "descheduler.name" . }}-pod
           annotations:
             scheduler.alpha.kubernetes.io/critical-pod: "true"
         spec:
             containers:
-            - name: {{ template "name" . }}
+            - name: {{ template "descheduler.name" . }}
               image: "{{ .Values.descheduler.image.name }}:{{ .Values.descheduler.image.tag }}"
               volumeMounts:
               - mountPath: /policy-dir
@@ -31,8 +31,8 @@ spec:
               - "-ec"
               - "/bin/descheduler -v 2 --policy-config-file /policy-dir/policy.yaml"
             restartPolicy: "{{ .Values.descheduler.job.restartPolicy }}"
-            serviceAccountName: {{ template "name" . }}-sa
+            serviceAccountName: {{ template "descheduler.name" . }}-sa
             volumes:
             - name: policy-volume
               configMap:
-                name: {{ template "name" . }}-policy-configmap
+                name: {{ template "descheduler.name" . }}-policy-configmap

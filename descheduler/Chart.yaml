@@ -1,7 +1,7 @@
 apiVersion: v1
 name: descheduler
 description: descheduler chart that runs on kubernetes
-version: 1.0.5
+version: 1.0.7
 keywords:
   - descheduler
   - kubernetes
